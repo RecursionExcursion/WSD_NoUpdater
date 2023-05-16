@@ -1,46 +1,85 @@
 package com.example.wsd.fx_nodes;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
+import com.example.wsd.deployables.Deployer;
+import com.example.wsd.deployables.StartUp;
+import com.example.wsd.deployables.deploy.Deployable;
+import com.example.wsd.repo.StartUpDataAPI;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 
 import java.util.List;
-import java.util.Map;
 
 public class TableInitializer implements TableViewInitializer {
 
-    private final TableView<Map.Entry<Long, String>> table;
+    private final TableView<StartUp> table;
+    private final StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
 
-    public TableInitializer(TableView<Map.Entry<Long, String>> table, String searchString) {
+    public TableInitializer(TableView<StartUp> table) {
         this.table = table;
     }
 
     @Override
     public void initializeTable() {
 
-        TableColumn<Map.Entry<Long, String>, String> mainCol = new TableColumn<>("Title");
+        TableColumn<StartUp, StartUp> startUpCol = new TableColumn<>("Start Ups");
+        TableColumn<StartUp, StartUp> actionCol = new TableColumn<>("Actions");
 
+        startUpCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 1.5)); // .6
+        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 3)); // .3
 
-        mainCol.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getValue()));
-        mainCol.setCellFactory(p -> new TableCell<>() {
+        startUpCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
+        startUpCol.setCellFactory(p -> new TableCell<>() {
             @Override
-            protected void updateItem(final String title, boolean empty) {
-                super.updateItem(title, empty);
-                setText(title);
+            protected void updateItem(StartUp su, boolean b) {
+                super.updateItem(su, b);
+                if (su != null) {
+                    setText(su.getName());
+                } else {
+                    setText(null);
+                }
             }
         });
-        mainCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00));
 
-        List<Map.Entry<Long, String>> entries;
+        actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
+        actionCol.setCellFactory(p -> new TableCell<>() {
+            private final Button deployButton = new Button("Deploy");
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+            final HBox hBox = new HBox(deployButton, editButton, deleteButton);
 
-        ObservableList<Map.Entry<Long, String>> items = FXCollections.observableArrayList();
+            @Override
+            protected void updateItem(StartUp su, boolean b) {
+                super.updateItem(su, b);
 
-        //Setting Nodes
-        table.getColumns().add(mainCol);
+                if (su != null) {
+                    hBox.setSpacing(5);
+                    setGraphic(hBox);
 
-        table.setItems(items);
+                    deployButton.setOnAction(e -> {
+                        for (Deployable path : su.getDeployablePaths()) {
+                            Deployer.deploy(path);
+                        }
+                    });
+
+                    deleteButton.setOnAction(e -> {
+                        ObservableList<StartUp> items = table.getItems();
+                        items.remove(su);
+                        startUpDataAPI.saveStartUpsToMemory(items);
+                    });
+
+                } else {
+                    setGraphic(null);
+                }
+            }
+        });
+
+
+        table.getColumns().setAll(List.of(startUpCol, actionCol));
+        table.getItems().addAll(startUpDataAPI.getInMemoryStartUps());
     }
 }

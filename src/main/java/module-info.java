@@ -6,6 +6,7 @@ module com.example.wsd {
 
     opens com.example.wsd to javafx.fxml;
     exports com.example.wsd;
+    exports com.example.wsd.models;
     exports com.example.wsd.controllers;
     exports com.example.wsd.deployables;
     opens com.example.wsd.controllers to javafx.fxml;

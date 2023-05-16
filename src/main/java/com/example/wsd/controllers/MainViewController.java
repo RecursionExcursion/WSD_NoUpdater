@@ -2,10 +2,15 @@ package com.example.wsd.controllers;
 
 import com.example.wsd.HelloApplication;
 import com.example.wsd.deployables.StartUp;
+import com.example.wsd.fx_nodes.TableInitializer;
+import com.example.wsd.repo.StartUpDataAPI;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -15,17 +20,21 @@ import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
 
+    @FXML
+    public TableView<StartUp> mainTable;
+
+    private final StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        new TableInitializer(mainTable).initializeTable();
     }
 
     public void newButtonClick(ActionEvent actionEvent) {
         System.out.println("New button Click");
 
 
-        StartUp startUp = new StartUp("New troller");
+        StartUp startUp = new StartUp("New SU");
         try {
             showNewStartUpPopUp(startUp);
         } catch (IOException e) {
@@ -40,7 +49,7 @@ public class MainViewController implements Initializable {
         Stage popUpWindow = new Stage();
 
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
-        popUpWindow.setTitle("This is a pop up window");
+        popUpWindow.setTitle("Start Up Creator");
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("new-startup-view.fxml"));
 
@@ -53,5 +62,11 @@ public class MainViewController implements Initializable {
 
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
+
+        if (!startUp.getDeployablePaths().isEmpty()) {
+            ObservableList<StartUp> items = mainTable.getItems();
+            items.add(startUp);
+            startUpDataAPI.saveStartUpsToMemory(items);
+        }
     }
 }
