@@ -12,8 +12,7 @@ public class StartUp implements Serializable {
     private String name;
     private final List<Deployable> deployables;
 
-    public StartUp(String name) {
-        this.name = name;
+    public StartUp() {
         deployables = new ArrayList<>();
     }
 

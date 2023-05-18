@@ -2,16 +2,13 @@ package com.example.wsd.fx_nodes;
 
 import com.example.wsd.models.PathString;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 public class NewStartUpTableInitializer implements TableViewInitializer {
@@ -36,15 +33,15 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         //Column Set up
         pathCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         pathCol.setCellFactory(p -> new TableCell<>() {
-            private final TextField pathField = new TextField();
+            private final TextField pathTextField = new TextField();
 
             @Override
             protected void updateItem(PathString ps, boolean b) {
                 super.updateItem(ps, b);
                 if (ps != null) {
-                    setGraphic(pathField);
-                    pathField.textProperty().setValue(ps.getPath());
-                    pathField.textProperty().addListener((observableValue, oldVal, newVal) -> ps.setPath(newVal));
+                    setGraphic(pathTextField);
+                    pathTextField.textProperty().setValue(ps.getPath());
+                    pathTextField.textProperty().addListener((observableValue, oldVal, newVal) -> ps.setPath(newVal));
                 } else {
                     setGraphic(null);
                 }
@@ -67,11 +64,12 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
                     testButton.setOnAction(e -> {
                         System.out.printf("Testing... %s%n", ps.getPath());
-                        try {
-                            testPath(ps.getPath());
-                            System.out.println("Valid path");
-                        } catch (URISyntaxException | IOException ex) {
-                            System.out.println("Invalid path");
+
+                        boolean isValid = testPath(ps.getPath());
+                        if (isValid) {
+                            System.out.printf("%s is valid%n", ps.getPath());
+                        } else {
+                            System.out.printf("%s is not valid%n", ps.getPath());
                         }
                     });
 
@@ -88,14 +86,16 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         table.getItems().setAll(List.of(new PathString()));
     }
 
-    private void testPath(String s) throws URISyntaxException, IOException {
-
-        //TODO
-        Desktop desktop = Desktop.getDesktop();
-        File file = new File(s);
-        URI uri = new URI(s);
-        boolean b = file.canExecute();
-        if (b) desktop.open(file);
-        else desktop.browse(new URI(s));
+    //TODO Fix testing logic (drop button and place in update lambda?)
+    private boolean testPath(String path) {
+        try {
+            //Test if path is valid File Path
+            if (new File(path).canExecute()) return true;
+            //Check if Path is Valid URL
+            new URL(path).toURI();
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
+            return false;
+        }
     }
 }

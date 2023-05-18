@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,13 +49,21 @@ public class NewStartupViewController implements Initializable {
 
     public void createStartUpClick() {
         ObservableList<PathString> items = pathTableView.getItems();
+
+        boolean listIsCompletelyValid = true;
         for (PathString i : items) {
-            String s = i.getPath();
-            startUp.getDeployablePaths().add(getDeployable(s));
+            listIsCompletelyValid = testPath(i.getPath());
         }
-        startUp.setName(startUpNameTextField.getText());
-        Stage window = (Stage) pathTableView.getScene().getWindow();
-        window.close();
+
+        if (listIsCompletelyValid) {
+            for (PathString i : items) {
+                String s = i.getPath();
+                startUp.getDeployablePaths().add(getDeployable(s));
+            }
+            startUp.setName(startUpNameTextField.getText());
+            Stage window = (Stage) pathTableView.getScene().getWindow();
+            window.close();
+        }
     }
 
     private Deployable getDeployable(String s) {
@@ -66,6 +75,18 @@ public class NewStartupViewController implements Initializable {
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private boolean testPath(String path) {
+        try {
+            //Test if path is valid File Path
+            if (new File(path).canExecute()) return true;
+            //Check if Path is Valid URL
+            new URL(path).toURI();
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
+            return false;
         }
     }
 }

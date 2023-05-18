@@ -5,7 +5,6 @@ import com.example.wsd.deployables.StartUp;
 import com.example.wsd.fx_nodes.TableInitializer;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,18 +29,13 @@ public class MainViewController implements Initializable {
         new TableInitializer(mainTable).initializeTable();
     }
 
-    public void newButtonClick(ActionEvent actionEvent) {
-        System.out.println("New button Click");
-
-
-        StartUp startUp = new StartUp("New SU");
+    public void newButtonClick() {
+        StartUp startUp = new StartUp();
         try {
             showNewStartUpPopUp(startUp);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     private void showNewStartUpPopUp(StartUp startUp) throws IOException {
