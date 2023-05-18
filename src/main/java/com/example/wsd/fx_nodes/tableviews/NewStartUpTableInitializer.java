@@ -1,5 +1,9 @@
-package com.example.wsd.fx_nodes;
+package com.example.wsd.fx_nodes.tableviews;
 
+import com.example.wsd.deployables.StartUp;
+import com.example.wsd.deployables.deploy.Deployable;
+import com.example.wsd.deployables.deploy.DeployableFile;
+import com.example.wsd.deployables.deploy.DeployableUrl;
 import com.example.wsd.models.PathString;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.*;
@@ -9,14 +13,33 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewStartUpTableInitializer implements TableViewInitializer {
 
     private final TableView<PathString> table;
+    private final List<PathString> pathStrings;
 
     public NewStartUpTableInitializer(TableView<PathString> table) {
         this.table = table;
+        pathStrings = List.of(new PathString());
+    }
+
+    public NewStartUpTableInitializer(StartUp startUp, TableView<PathString> table) {
+        this.table = table;
+        List<PathString> pathStrings = new ArrayList<>();
+        for (Deployable deployablePath : startUp.getDeployablePaths()) {
+
+            String s = deployablePath instanceof DeployableFile ?
+                    ((DeployableFile) deployablePath).getFile().toString() :
+                    ((DeployableUrl) deployablePath).getURL().toString();
+
+            PathString ps = new PathString();
+            ps.setPath(s);
+            pathStrings.add(ps);
+        }
+        this.pathStrings = pathStrings;
     }
 
     @Override
@@ -83,7 +106,12 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
 
         table.getColumns().setAll(List.of(pathCol, actionCol));
-        table.getItems().setAll(List.of(new PathString()));
+
+        if(pathStrings.isEmpty()){
+            table.getItems().setAll(List.of(new PathString()));
+        }else  {
+            table.getItems().setAll(pathStrings);
+        }
     }
 
     //TODO Fix testing logic (drop button and place in update lambda?)

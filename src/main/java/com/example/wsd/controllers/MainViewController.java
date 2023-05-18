@@ -1,17 +1,12 @@
 package com.example.wsd.controllers;
 
-import com.example.wsd.HelloApplication;
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.fx_nodes.TableInitializer;
+import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
+import com.example.wsd.fx_nodes.tableviews.TableInitializer;
 import com.example.wsd.repo.StartUpDataAPI;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.TableView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,37 +25,14 @@ public class MainViewController implements Initializable {
     }
 
     public void newButtonClick() {
-        StartUp startUp = new StartUp();
         try {
-            showNewStartUpPopUp(startUp);
+            showNewStartUpPopUp(new StartUp());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void showNewStartUpPopUp(StartUp startUp) throws IOException {
-
-        Stage popUpWindow = new Stage();
-
-        popUpWindow.initModality(Modality.APPLICATION_MODAL);
-        popUpWindow.setTitle("Start Up Creator");
-
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("new-startup-view.fxml"));
-
-        /*
-            Order must be maintained below
-         */
-        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
-        NewStartupViewController controller = fxmlLoader.getController();
-        controller.init(startUp);
-
-        popUpWindow.setScene(scene);
-        popUpWindow.showAndWait();
-
-        if (!startUp.getDeployablePaths().isEmpty()) {
-            ObservableList<StartUp> items = mainTable.getItems();
-            items.add(startUp);
-            startUpDataAPI.saveStartUpsToMemory(items);
-        }
+        StartUpEditorPopUp.createStartUpPopUp(startUp, mainTable);
     }
 }

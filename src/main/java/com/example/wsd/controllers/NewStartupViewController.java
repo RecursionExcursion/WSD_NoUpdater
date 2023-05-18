@@ -4,7 +4,7 @@ import com.example.wsd.deployables.StartUp;
 import com.example.wsd.deployables.deploy.Deployable;
 import com.example.wsd.deployables.deploy.DeployableFile;
 import com.example.wsd.deployables.deploy.DeployableUrl;
-import com.example.wsd.fx_nodes.NewStartUpTableInitializer;
+import com.example.wsd.fx_nodes.tableviews.NewStartUpTableInitializer;
 import com.example.wsd.models.PathString;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,11 +35,11 @@ public class NewStartupViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startUpNameTextField.textProperty().setValue("New Start Up");
-        new NewStartUpTableInitializer(pathTableView).initializeTable();
     }
 
     public void init(StartUp startUp) {
         this.startUp = startUp;
+        new NewStartUpTableInitializer(startUp, pathTableView).initializeTable();
     }
 
     public void addRowClick() {

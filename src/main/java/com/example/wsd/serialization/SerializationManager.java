@@ -1,15 +1,5 @@
 package com.example.wsd.serialization;
 
-/**
- * Manager of ObjectSerializer
- * 'SerializablePlaceHolder' type should be replaced by the Object to be Serialized that implements the Serializable interface
- * FilePath and FileName must be updated
- * All are marked with //TODO
- * <p>
- * Handling multiple ObjectSerializer's are possible
- */
-
-
 public enum SerializationManager {
 
     INSTANCE;

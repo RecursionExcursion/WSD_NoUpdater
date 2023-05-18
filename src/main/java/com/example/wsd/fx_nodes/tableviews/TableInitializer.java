@@ -1,8 +1,9 @@
-package com.example.wsd.fx_nodes;
+package com.example.wsd.fx_nodes.tableviews;
 
 import com.example.wsd.deployables.Deployer;
 import com.example.wsd.deployables.StartUp;
 import com.example.wsd.deployables.deploy.Deployable;
+import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TableInitializer implements TableViewInitializer {
@@ -63,6 +65,14 @@ public class TableInitializer implements TableViewInitializer {
                     deployButton.setOnAction(e -> {
                         for (Deployable path : su.getDeployablePaths()) {
                             Deployer.deploy(path);
+                        }
+                    });
+
+                    editButton.setOnAction(e -> {
+                        try {
+                            StartUpEditorPopUp.createStartUpPopUp(su, table);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
                         }
                     });
 
