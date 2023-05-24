@@ -5,7 +5,9 @@ import com.example.wsd.deployables.deploy.Deployable;
 import com.example.wsd.deployables.deploy.DeployableFile;
 import com.example.wsd.deployables.deploy.DeployableUrl;
 import com.example.wsd.fx_nodes.tableviews.NewStartUpTableInitializer;
+import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
+import com.example.wsd.models.StartUpConfirmationWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,9 +18,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class NewStartupViewController implements Initializable {
     @FXML
@@ -31,15 +34,21 @@ public class NewStartupViewController implements Initializable {
     public TextField startUpNameTextField;
 
     private StartUp startUp;
+    private StartUpConfirmationWrapper confirmationWrapper;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startUpNameTextField.textProperty().setValue("New Start Up");
     }
 
-    public void init(StartUp startUp) {
-        this.startUp = startUp;
+    public void init(StartUpConfirmationWrapper confirmationWrapper) {
+        this.confirmationWrapper = confirmationWrapper;
+        startUp = confirmationWrapper.getStartUp();
         new NewStartUpTableInitializer(startUp, pathTableView).initializeTable();
+        if (startUp.getName() != null) {
+            startUpNameTextField.textProperty().setValue(startUp.getName());
+        }
+
     }
 
     public void addRowClick() {
@@ -49,19 +58,26 @@ public class NewStartupViewController implements Initializable {
 
     public void createStartUpClick() {
         ObservableList<PathString> items = pathTableView.getItems();
+        Set<PathString> pathStringSet = new HashSet<>(items);
 
         boolean listIsCompletelyValid = true;
-        for (PathString i : items) {
-            listIsCompletelyValid = testPath(i.getPath());
+        for (PathString i : pathStringSet) {
+            listIsCompletelyValid = PathTester.testPath(i.getPath());
         }
 
         if (listIsCompletelyValid) {
-            for (PathString i : items) {
+            for (PathString i : pathStringSet) {
                 String s = i.getPath();
                 startUp.getDeployablePaths().add(getDeployable(s));
             }
+
+            //TODO Code Smell - Clearing list to add set back into list
             startUp.setName(startUpNameTextField.getText());
+            startUp.getDeployablePaths().clear();
+            pathStringSet.forEach(ps -> startUp.getDeployablePaths().add(getDeployable(ps.getPath())));
+
             Stage window = (Stage) pathTableView.getScene().getWindow();
+            confirmationWrapper.setConfirmed(true);
             window.close();
         }
     }
@@ -75,18 +91,6 @@ public class NewStartupViewController implements Initializable {
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private boolean testPath(String path) {
-        try {
-            //Test if path is valid File Path
-            if (new File(path).canExecute()) return true;
-            //Check if Path is Valid URL
-            new URL(path).toURI();
-            return true;
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
         }
     }
 }

@@ -3,7 +3,6 @@ package com.example.wsd.controllers;
 import com.example.wsd.deployables.StartUp;
 import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.fx_nodes.tableviews.TableInitializer;
-import com.example.wsd.repo.StartUpDataAPI;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
@@ -16,8 +15,6 @@ public class MainViewController implements Initializable {
 
     @FXML
     public TableView<StartUp> mainTable;
-
-    private final StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

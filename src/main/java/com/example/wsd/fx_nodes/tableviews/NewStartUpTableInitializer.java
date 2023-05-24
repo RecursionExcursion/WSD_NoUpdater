@@ -4,17 +4,15 @@ import com.example.wsd.deployables.StartUp;
 import com.example.wsd.deployables.deploy.Deployable;
 import com.example.wsd.deployables.deploy.DeployableFile;
 import com.example.wsd.deployables.deploy.DeployableUrl;
+import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class NewStartUpTableInitializer implements TableViewInitializer {
 
@@ -42,6 +40,7 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         this.pathStrings = pathStrings;
     }
 
+
     @Override
     public void initializeTable() {
 
@@ -50,8 +49,8 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         TableColumn<PathString, PathString> actionCol = new TableColumn<>("Actions");
 
         //Column Width
-        pathCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 2)); // .6
-        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 2)); // .3
+        pathCol.prefWidthProperty().bind(table.widthProperty().multiply(4.00 / 5)); // .6
+        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 5)); // .3
 
         //Column Set up
         pathCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
@@ -60,6 +59,16 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
             @Override
             protected void updateItem(PathString ps, boolean b) {
+
+                pathTextField.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                pathTextField.textProperty().addListener((ob, ov, nv) -> {
+                    if (PathTester.testPath(nv)) {
+                        pathTextField.setStyle(null);
+                    }else {
+                        pathTextField.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    }
+                });
+
                 super.updateItem(ps, b);
                 if (ps != null) {
                     setGraphic(pathTextField);
@@ -73,9 +82,8 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
         actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         actionCol.setCellFactory(p -> new TableCell<>() {
-            private final Button testButton = new Button("Test");
             private final Button deleteButton = new Button("Delete");
-            final HBox hBox = new HBox(testButton, deleteButton);
+            final HBox hBox = new HBox( deleteButton);
 
             @Override
             protected void updateItem(PathString ps, boolean b) {
@@ -84,18 +92,6 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
                 if (ps != null) {
                     hBox.setSpacing(5);
                     setGraphic(hBox);
-
-                    testButton.setOnAction(e -> {
-                        System.out.printf("Testing... %s%n", ps.getPath());
-
-                        boolean isValid = testPath(ps.getPath());
-                        if (isValid) {
-                            System.out.printf("%s is valid%n", ps.getPath());
-                        } else {
-                            System.out.printf("%s is not valid%n", ps.getPath());
-                        }
-                    });
-
                     deleteButton.setOnAction(e -> table.getItems().remove(ps));
 
                 } else {
@@ -107,23 +103,10 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
         table.getColumns().setAll(List.of(pathCol, actionCol));
 
-        if(pathStrings.isEmpty()){
+        if (pathStrings.isEmpty()) {
             table.getItems().setAll(List.of(new PathString()));
-        }else  {
+        } else {
             table.getItems().setAll(pathStrings);
-        }
-    }
-
-    //TODO Fix testing logic (drop button and place in update lambda?)
-    private boolean testPath(String path) {
-        try {
-            //Test if path is valid File Path
-            if (new File(path).canExecute()) return true;
-            //Check if Path is Valid URL
-            new URL(path).toURI();
-            return true;
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
         }
     }
 }

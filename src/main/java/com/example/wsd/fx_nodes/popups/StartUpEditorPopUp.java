@@ -3,6 +3,7 @@ package com.example.wsd.fx_nodes.popups;
 import com.example.wsd.HelloApplication;
 import com.example.wsd.controllers.NewStartupViewController;
 import com.example.wsd.deployables.StartUp;
+import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +16,21 @@ import java.io.IOException;
 
 public class StartUpEditorPopUp {
 
+    /** Creates a smaller window to edit StartUp Objects.
+     *
+     * <p> Creates a smaller window that takes URLs and FilePaths.
+     * The wrapper object is used for validation upon the user
+     * click of the 'Create' button. </p>
+     *
+     * @param startUp the StartUp object to be edited
+     * @param table the table that will have the StartUp added to, as well as will be written into memory
+     */
+
     public static void createStartUpPopUp(StartUp startUp, TableView<StartUp> table) throws IOException {
         Stage popUpWindow = new Stage();
+
+
+        StartUpConfirmationWrapper confirmationWrapper = new StartUpConfirmationWrapper(startUp);
 
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
         popUpWindow.setTitle("Start Up Editor");
@@ -28,17 +42,18 @@ public class StartUpEditorPopUp {
          */
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
         NewStartupViewController controller = fxmlLoader.getController();
-        controller.init(startUp);
+        controller.init(confirmationWrapper);
 
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
 
-        //TODO Bug, Start up is created upon exiting popup regardless if submit is pressed, StartUp will not be empty
-        // if it is being edited.
-        if (!startUp.getDeployablePaths().isEmpty()) {
+        if (confirmationWrapper.isConfirmed()) {
             ObservableList<StartUp> items = table.getItems();
-            items.add(startUp);
+            if(!items.contains(startUp)){
+                items.add(startUp);
+            }
             new StartUpDataAPI().saveStartUpsToMemory(items);
+            table.refresh();
         }
     }
 }
