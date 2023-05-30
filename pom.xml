@@ -60,10 +60,10 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.wsd/com.example.wsd.HelloApplication</mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <mainClass>com.example.wsd.Launcher</mainClass>
+                            <launcher>WSD</launcher>
+                            <jlinkZipName>WSD</jlinkZipName>
+                            <jlinkImageName>WSD</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
