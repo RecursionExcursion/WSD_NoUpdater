@@ -1,4 +1,4 @@
-package com.example.wsd.serialization;
+package com.example.wsd.repo.serialization;
 
 public enum SerializationManager {
 
@@ -6,19 +6,19 @@ public enum SerializationManager {
 
     private final String pathToFileFolder = "src/main/resources/";
     private final String fileName = "startups";
-    private final ObjectSerializer<SerializableStartUps> objectSerializer =
+    private final ObjectSerializer<SerializableStartUpList> objectSerializer =
             new ObjectSerializer<>(pathToFileFolder + fileName);
 
-    public SerializableStartUps loadObject() {
+    public SerializableStartUpList loadObject() {
         try {
             return objectSerializer.load();
         } catch (Exception e) {
-            objectSerializer.save(new SerializableStartUps());
+            objectSerializer.save(new SerializableStartUpList());
             return objectSerializer.load();
         }
     }
 
-    public void saveObject(SerializableStartUps obj) {
+    public void saveObject(SerializableStartUpList obj) {
         objectSerializer.save(obj);
     }
 }

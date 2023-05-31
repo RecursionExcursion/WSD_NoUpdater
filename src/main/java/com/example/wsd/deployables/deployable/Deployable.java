@@ -1,4 +1,4 @@
-package com.example.wsd.deployables.deploy;
+package com.example.wsd.deployables.deployable;
 
 import java.io.Serializable;
 

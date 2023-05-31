@@ -1,4 +1,4 @@
-package com.example.wsd.serialization;
+package com.example.wsd.repo.serialization;
 
 import java.io.*;
 

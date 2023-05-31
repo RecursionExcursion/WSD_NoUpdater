@@ -1,9 +1,9 @@
 package com.example.wsd.controllers;
 
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.deployables.deploy.Deployable;
-import com.example.wsd.deployables.deploy.DeployableFile;
-import com.example.wsd.deployables.deploy.DeployableUrl;
+import com.example.wsd.deployables.deployable.Deployable;
+import com.example.wsd.deployables.deployable.DeployableFile;
+import com.example.wsd.deployables.deployable.DeployableUrl;
 import com.example.wsd.fx_nodes.tableviews.NewStartUpTableInitializer;
 import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
@@ -19,9 +19,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 public class NewStartupViewController implements Initializable {
     @FXML
@@ -48,7 +46,6 @@ public class NewStartupViewController implements Initializable {
         if (startUp.getName() != null) {
             startUpNameTextField.textProperty().setValue(startUp.getName());
         }
-
     }
 
     public void addRowClick() {
@@ -58,23 +55,20 @@ public class NewStartupViewController implements Initializable {
 
     public void createStartUpClick() {
         ObservableList<PathString> items = pathTableView.getItems();
-        Set<PathString> pathStringSet = new HashSet<>(items);
 
-        boolean listIsCompletelyValid = true;
-        for (PathString i : pathStringSet) {
-            listIsCompletelyValid = PathTester.testPath(i.getPath());
-        }
+        boolean listIsCompletelyValid = items.stream()
+                                             .map(path -> PathTester.testPath(path.getPath()))
+                                             .filter(b -> !b)
+                                             .findAny()
+                                             .orElse(true);
 
         if (listIsCompletelyValid) {
-            for (PathString i : pathStringSet) {
-                String s = i.getPath();
-                startUp.getDeployablePaths().add(getDeployable(s));
-            }
 
-            //TODO Code Smell - Clearing list to add set back into list
-            startUp.setName(startUpNameTextField.getText());
+            //TODO Code Smell - Clearing list to add back to list?
             startUp.getDeployablePaths().clear();
-            pathStringSet.forEach(ps -> startUp.getDeployablePaths().add(getDeployable(ps.getPath())));
+            items.forEach(ps -> startUp.getDeployablePaths().add(getDeployable(ps.getPath())));
+
+            startUp.setName(startUpNameTextField.getText());
 
             Stage window = (Stage) pathTableView.getScene().getWindow();
             confirmationWrapper.setConfirmed(true);

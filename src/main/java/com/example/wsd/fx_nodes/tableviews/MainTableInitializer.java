@@ -2,7 +2,7 @@ package com.example.wsd.fx_nodes.tableviews;
 
 import com.example.wsd.deployables.Deployer;
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.deployables.deploy.Deployable;
+import com.example.wsd.deployables.deployable.Deployable;
 import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -28,11 +28,20 @@ public class MainTableInitializer implements TableViewInitializer {
     @Override
     public void initializeTable() {
 
-        TableColumn<StartUp, StartUp> startUpCol = new TableColumn<>("Start Ups");
-        TableColumn<StartUp, StartUp> actionCol = new TableColumn<>("Actions");
+        //Col Init
+        TableColumn<StartUp, StartUp> startUpCol = initializeStartUpColumn();
+        TableColumn<StartUp, StartUp> actionCol = initializeActionColumn();
 
+        //Col Width
         startUpCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 1.5)); // .6
         actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 3)); // .3
+
+        table.getColumns().setAll(List.of(startUpCol, actionCol));
+        table.getItems().addAll(startUpDataAPI.getInMemoryStartUps());
+    }
+
+    private static TableColumn<StartUp, StartUp> initializeStartUpColumn() {
+        TableColumn<StartUp, StartUp> startUpCol = new TableColumn<>("Start Ups");
 
         startUpCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         startUpCol.setCellFactory(p -> new TableCell<>() {
@@ -46,6 +55,11 @@ public class MainTableInitializer implements TableViewInitializer {
                 }
             }
         });
+        return startUpCol;
+    }
+
+    private TableColumn<StartUp, StartUp> initializeActionColumn() {
+        TableColumn<StartUp, StartUp> actionCol = new TableColumn<>("Actions");
 
         actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         actionCol.setCellFactory(p -> new TableCell<>() {
@@ -87,9 +101,6 @@ public class MainTableInitializer implements TableViewInitializer {
                 }
             }
         });
-
-
-        table.getColumns().setAll(List.of(startUpCol, actionCol));
-        table.getItems().addAll(startUpDataAPI.getInMemoryStartUps());
+        return actionCol;
     }
 }

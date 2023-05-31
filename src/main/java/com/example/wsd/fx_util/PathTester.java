@@ -8,6 +8,7 @@ import java.net.URL;
 public class PathTester {
 
     public static boolean testPath(String path) {
+        if (path.isEmpty()) return false;
         try {
             //Test if path is valid File Path
             if (new File(path).canExecute()) return true;

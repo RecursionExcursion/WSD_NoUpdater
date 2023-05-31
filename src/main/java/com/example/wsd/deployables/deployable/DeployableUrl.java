@@ -1,4 +1,4 @@
-package com.example.wsd.deployables.deploy;
+package com.example.wsd.deployables.deployable;
 
 import java.net.MalformedURLException;
 import java.net.URL;

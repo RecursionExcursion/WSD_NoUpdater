@@ -1,11 +1,11 @@
-package com.example.wsd.serialization;
+package com.example.wsd.repo.serialization;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public final class DirectoryManager {
+final class DirectoryManager {
 
     //TODO bind to Serialization manager for proper pathing during deployment
 
@@ -19,8 +19,8 @@ public final class DirectoryManager {
     private static final Path applicationDir = Paths.get(USER_HOME, FOLDER_PATH);
 
 
-    public static Path getDir() {
-        if(!Files.exists(applicationDir)){
+    static Path getDir() {
+        if (!Files.exists(applicationDir)) {
             createDir();
         }
         return applicationDir;
@@ -28,7 +28,7 @@ public final class DirectoryManager {
 
     private static void createDir() {
         try {
-                Files.createDirectories(applicationDir);
+            Files.createDirectories(applicationDir);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,9 +1,9 @@
 package com.example.wsd.fx_nodes.tableviews;
 
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.deployables.deploy.Deployable;
-import com.example.wsd.deployables.deploy.DeployableFile;
-import com.example.wsd.deployables.deploy.DeployableUrl;
+import com.example.wsd.deployables.deployable.Deployable;
+import com.example.wsd.deployables.deployable.DeployableFile;
+import com.example.wsd.deployables.deployable.DeployableUrl;
 import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -18,11 +18,6 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
     private final TableView<PathString> table;
     private final List<PathString> pathStrings;
-
-    public NewStartUpTableInitializer(TableView<PathString> table) {
-        this.table = table;
-        pathStrings = List.of(new PathString());
-    }
 
     public NewStartUpTableInitializer(StartUp startUp, TableView<PathString> table) {
         this.table = table;
@@ -63,7 +58,6 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
     private TableColumn<PathString, PathString> initializePathColumn() {
         TableColumn<PathString, PathString> pathCol = new TableColumn<>("Path");
-        //Column Set up
         pathCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         pathCol.setCellFactory(p -> new TableCell<>() {
             @Override

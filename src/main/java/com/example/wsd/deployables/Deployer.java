@@ -1,9 +1,9 @@
 package com.example.wsd.deployables;
 
 
-import com.example.wsd.deployables.deploy.Deployable;
-import com.example.wsd.deployables.deploy.DeployableFile;
-import com.example.wsd.deployables.deploy.DeployableUrl;
+import com.example.wsd.deployables.deployable.Deployable;
+import com.example.wsd.deployables.deployable.DeployableFile;
+import com.example.wsd.deployables.deployable.DeployableUrl;
 
 import java.awt.Desktop;
 import java.io.File;

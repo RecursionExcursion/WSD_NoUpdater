@@ -1,8 +1,8 @@
 package com.example.wsd.repo;
 
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.serialization.SerializableStartUps;
-import com.example.wsd.serialization.SerializationManager;
+import com.example.wsd.repo.serialization.SerializableStartUpList;
+import com.example.wsd.repo.serialization.SerializationManager;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class StartUpDataAPI {
     }
 
     public void saveStartUpsToMemory(List<StartUp> startUps) {
-        SerializableStartUps ss = new SerializableStartUps();
+        SerializableStartUpList ss = new SerializableStartUpList();
         ss.getList().addAll(startUps);
         SERIALIZATION_MANAGER.saveObject(ss);
     }
