@@ -45,26 +45,36 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
     public void initializeTable() {
 
         //Column Init
-        TableColumn<PathString, PathString> pathCol = new TableColumn<>("Path");
-        TableColumn<PathString, PathString> actionCol = new TableColumn<>("Actions");
+        TableColumn<PathString, PathString> pathCol = initializePathColumn();
+        TableColumn<PathString, PathString> actionCol = initializeActionColumn();
 
         //Column Width
         pathCol.prefWidthProperty().bind(table.widthProperty().multiply(4.00 / 5)); // .6
         actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 5)); // .3
 
+        table.getColumns().setAll(List.of(pathCol, actionCol));
+
+        if (pathStrings.isEmpty()) {
+            table.getItems().setAll(List.of(new PathString()));
+        } else {
+            table.getItems().setAll(pathStrings);
+        }
+    }
+
+    private TableColumn<PathString, PathString> initializePathColumn() {
+        TableColumn<PathString, PathString> pathCol = new TableColumn<>("Path");
         //Column Set up
         pathCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         pathCol.setCellFactory(p -> new TableCell<>() {
-            private final TextField pathTextField = new TextField();
-
             @Override
             protected void updateItem(PathString ps, boolean b) {
+                final TextField pathTextField = new TextField();
 
                 pathTextField.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                 pathTextField.textProperty().addListener((ob, ov, nv) -> {
                     if (PathTester.testPath(nv)) {
                         pathTextField.setStyle(null);
-                    }else {
+                    } else {
                         pathTextField.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     }
                 });
@@ -79,11 +89,15 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
                 }
             }
         });
+        return pathCol;
+    }
 
+    private TableColumn<PathString, PathString> initializeActionColumn() {
+        TableColumn<PathString, PathString> actionCol = new TableColumn<>("Actions");
         actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         actionCol.setCellFactory(p -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
-            final HBox hBox = new HBox( deleteButton);
+            final HBox hBox = new HBox(deleteButton);
 
             @Override
             protected void updateItem(PathString ps, boolean b) {
@@ -99,14 +113,6 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
                 }
             }
         });
-
-
-        table.getColumns().setAll(List.of(pathCol, actionCol));
-
-        if (pathStrings.isEmpty()) {
-            table.getItems().setAll(List.of(new PathString()));
-        } else {
-            table.getItems().setAll(pathStrings);
-        }
+        return actionCol;
     }
 }

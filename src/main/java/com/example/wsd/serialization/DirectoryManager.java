@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 
 public final class DirectoryManager {
 
+    //TODO bind to Serialization manager for proper pathing during deployment
+
     private static final String USER_HOME = System.getProperty("user.home");
 
     private static final String COMPANY = "foofinc";

@@ -16,12 +16,12 @@ import javafx.scene.layout.HBox;
 import java.io.IOException;
 import java.util.List;
 
-public class TableInitializer implements TableViewInitializer {
+public class MainTableInitializer implements TableViewInitializer {
 
     private final TableView<StartUp> table;
     private final StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
 
-    public TableInitializer(TableView<StartUp> table) {
+    public MainTableInitializer(TableView<StartUp> table) {
         this.table = table;
     }
 
