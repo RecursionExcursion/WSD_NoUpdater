@@ -7,6 +7,8 @@ import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -37,7 +39,7 @@ public class MainTableInitializer implements TableViewInitializer {
         actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 3)); // .3
 
         table.getColumns().setAll(List.of(startUpCol, actionCol));
-        table.getItems().addAll(startUpDataAPI.getInMemoryStartUps());
+        table.getItems().addAll(startUpDataAPI.read());
     }
 
     private static TableColumn<StartUp, StartUp> initializeStartUpColumn() {
@@ -63,17 +65,16 @@ public class MainTableInitializer implements TableViewInitializer {
 
         actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         actionCol.setCellFactory(p -> new TableCell<>() {
-            private final Button deployButton = new Button("Deploy");
-            private final Button editButton = new Button("Edit");
-            private final Button deleteButton = new Button("Delete");
-            final HBox hBox = new HBox(deployButton, editButton, deleteButton);
+            private final Button deployButton = ButtonFactory.createButton("Deploy");
+            private final Button editButton = ButtonFactory.createButton("Edit");
+            private final Button deleteButton = ButtonFactory.createButton("Delete");
+            final HBox hBox = HBoxFactory.createHbox(deployButton, editButton, deleteButton);
 
             @Override
             protected void updateItem(StartUp su, boolean b) {
                 super.updateItem(su, b);
 
                 if (su != null) {
-                    hBox.setSpacing(5);
                     setGraphic(hBox);
 
                     deployButton.setOnAction(e -> {
@@ -91,17 +92,31 @@ public class MainTableInitializer implements TableViewInitializer {
                     });
 
                     deleteButton.setOnAction(e -> {
-                        List<StartUp> inMemoryStartUps = startUpDataAPI.getInMemoryStartUps();
-                        inMemoryStartUps.remove(su);
-                        table.setItems(FXCollections.observableList(inMemoryStartUps));
-                        startUpDataAPI.saveStartUpsToMemory();
+                        startUpDataAPI.delete(su);
+                        table.setItems(FXCollections.observableList(startUpDataAPI.read()));
                     });
-
                 } else {
                     setGraphic(null);
                 }
             }
         });
         return actionCol;
+    }
+
+    private static class ButtonFactory {
+        static Button createButton(String name) {
+            Button newButton = new Button(name);
+            newButton.setPrefWidth(60);
+            return newButton;
+        }
+    }
+
+    private static class HBoxFactory {
+        static HBox createHbox(Node... nodes) {
+            HBox newHbox = new HBox(nodes);
+            newHbox.alignmentProperty().setValue(Pos.CENTER);
+            newHbox.setSpacing(20);
+            return newHbox;
+        }
     }
 }

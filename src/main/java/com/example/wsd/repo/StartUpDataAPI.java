@@ -9,15 +9,33 @@ import java.util.List;
 public class StartUpDataAPI {
 
     private static final SerializationManager SERIALIZATION_MANAGER = SerializationManager.INSTANCE;
-    private static final List<StartUp> START_UP_LIST = SERIALIZATION_MANAGER.loadObject().getList();
+    private static final List<StartUp> GLOBAL_START_UP_LIST = SERIALIZATION_MANAGER.loadObject().getList();
 
-    public List<StartUp> getInMemoryStartUps() {
-        return START_UP_LIST;
+    public void create(StartUp newStartUp) {
+        GLOBAL_START_UP_LIST.add(newStartUp);
+        saveGlobalList();
     }
 
-    public void saveStartUpsToMemory() {
+    public List<StartUp> read() {
+        return GLOBAL_START_UP_LIST;
+    }
+
+    public void update() {
+        saveGlobalList();
+    }
+
+    public void delete(StartUp startUpToBeDeleted) {
+        GLOBAL_START_UP_LIST.remove(startUpToBeDeleted);
+        saveGlobalList();
+    }
+
+    private void saveGlobalList() {
+        SERIALIZATION_MANAGER.saveObject(mapToSerializableContainer());
+    }
+
+    private SerializableStartUpList mapToSerializableContainer() {
         SerializableStartUpList ss = new SerializableStartUpList();
-        ss.setList(START_UP_LIST);
-        SERIALIZATION_MANAGER.saveObject(ss);
+        ss.setList(GLOBAL_START_UP_LIST);
+        return ss;
     }
 }

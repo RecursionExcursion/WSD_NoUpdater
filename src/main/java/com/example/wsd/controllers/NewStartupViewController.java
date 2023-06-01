@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class NewStartupViewController implements Initializable {
@@ -94,9 +93,7 @@ public class NewStartupViewController implements Initializable {
         Stage window = (Stage) pathTableView.getScene().getWindow();
 
         StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
-        List<StartUp> inMemoryStartUps = startUpDataAPI.getInMemoryStartUps();
-        inMemoryStartUps.remove(startUp);
-        startUpDataAPI.saveStartUpsToMemory();
+        startUpDataAPI.delete(startUp);
 
         window.close();
     }

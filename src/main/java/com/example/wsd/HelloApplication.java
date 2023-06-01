@@ -24,6 +24,6 @@ public class HelloApplication extends Application {
 
     @Override
     public void stop() {
-        new StartUpDataAPI().saveStartUpsToMemory();
+        new StartUpDataAPI().update();
     }
 }

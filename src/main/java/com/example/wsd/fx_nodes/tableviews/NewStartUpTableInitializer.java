@@ -7,6 +7,8 @@ import com.example.wsd.deployables.deployable.DeployableUrl;
 import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
@@ -90,8 +92,8 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         TableColumn<PathString, PathString> actionCol = new TableColumn<>("Actions");
         actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         actionCol.setCellFactory(p -> new TableCell<>() {
-            private final Button deleteButton = new Button("Delete");
-            final HBox hBox = new HBox(deleteButton);
+            private final Button deleteButton = ButtonFactory.createButton("Delete");
+            final HBox hBox = HBoxFactory.createHbox(deleteButton);
 
             @Override
             protected void updateItem(PathString ps, boolean b) {
@@ -108,5 +110,22 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
             }
         });
         return actionCol;
+    }
+
+    private static class ButtonFactory {
+        static Button createButton(String name) {
+            Button newButton = new Button(name);
+            newButton.setPrefWidth(60);
+            return newButton;
+        }
+    }
+
+    private static class HBoxFactory {
+        static HBox createHbox(Node... nodes) {
+            HBox newHbox = new HBox(nodes);
+            newHbox.alignmentProperty().setValue(Pos.CENTER);
+            newHbox.setSpacing(20);
+            return newHbox;
+        }
     }
 }

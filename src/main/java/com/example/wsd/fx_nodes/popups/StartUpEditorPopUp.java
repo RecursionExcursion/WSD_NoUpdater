@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 public class StartUpEditorPopUp {
 
@@ -49,16 +48,14 @@ public class StartUpEditorPopUp {
         popUpWindow.showAndWait();
 
         StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
-        List<StartUp> inMemoryStartUps = startUpDataAPI.getInMemoryStartUps();
 
         if (confirmationWrapper.isConfirmed()) {
 
-            if(!inMemoryStartUps.contains(startUp)){
-                inMemoryStartUps.add(startUp);
+            if(!startUpDataAPI.read().contains(startUp)){
+                startUpDataAPI.create(startUp);
             }
-            new StartUpDataAPI().saveStartUpsToMemory();
         }
-        table.setItems(FXCollections.observableList(inMemoryStartUps));
-
+        table.setItems(FXCollections.observableList(startUpDataAPI.read()));
+        table.refresh();
     }
 }
