@@ -7,7 +7,7 @@ public enum SerializationManager {
     private final String pathToFileFolder = "src/main/resources/";
     private final String fileName = "startups";
     private final ObjectSerializer<SerializableStartUpList> objectSerializer =
-            new ObjectSerializer<>(pathToFileFolder + fileName);
+            new ObjectSerializer<>(String.format("%s/%s", pathToFileFolder, fileName));
 
     public SerializableStartUpList loadObject() {
         try {
