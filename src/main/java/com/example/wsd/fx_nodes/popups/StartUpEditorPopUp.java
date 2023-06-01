@@ -5,7 +5,7 @@ import com.example.wsd.controllers.NewStartupViewController;
 import com.example.wsd.deployables.StartUp;
 import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
-import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class StartUpEditorPopUp {
 
@@ -47,13 +48,17 @@ public class StartUpEditorPopUp {
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
 
+        StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
+        List<StartUp> inMemoryStartUps = startUpDataAPI.getInMemoryStartUps();
+
         if (confirmationWrapper.isConfirmed()) {
-            ObservableList<StartUp> items = table.getItems();
-            if(!items.contains(startUp)){
-                items.add(startUp);
+
+            if(!inMemoryStartUps.contains(startUp)){
+                inMemoryStartUps.add(startUp);
             }
-            new StartUpDataAPI().saveStartUpsToMemory(items);
-            table.refresh();
+            new StartUpDataAPI().saveStartUpsToMemory();
         }
+        table.setItems(FXCollections.observableList(inMemoryStartUps));
+
     }
 }

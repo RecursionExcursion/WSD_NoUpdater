@@ -9,14 +9,15 @@ import java.util.List;
 public class StartUpDataAPI {
 
     private static final SerializationManager SERIALIZATION_MANAGER = SerializationManager.INSTANCE;
+    private static final List<StartUp> START_UP_LIST = SERIALIZATION_MANAGER.loadObject().getList();
 
     public List<StartUp> getInMemoryStartUps() {
-        return SERIALIZATION_MANAGER.loadObject().getList();
+        return START_UP_LIST;
     }
 
-    public void saveStartUpsToMemory(List<StartUp> startUps) {
+    public void saveStartUpsToMemory() {
         SerializableStartUpList ss = new SerializableStartUpList();
-        ss.getList().addAll(startUps);
+        ss.setList(START_UP_LIST);
         SERIALIZATION_MANAGER.saveObject(ss);
     }
 }

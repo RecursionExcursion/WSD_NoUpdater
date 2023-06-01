@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 final class DirectoryManager {
 
     //TODO bind to Serialization manager for proper pathing during deployment
+    //TODO then delete .ser file in resources
 
     private static final String USER_HOME = System.getProperty("user.home");
 
@@ -17,7 +18,6 @@ final class DirectoryManager {
     private static final String FOLDER_PATH = String.format("Documents/%s/%s", COMPANY, FOLDER);
 
     private static final Path applicationDir = Paths.get(USER_HOME, FOLDER_PATH);
-
 
     static Path getDir() {
         if (!Files.exists(applicationDir)) {

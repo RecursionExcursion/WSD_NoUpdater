@@ -8,6 +8,7 @@ import com.example.wsd.fx_nodes.tableviews.NewStartUpTableInitializer;
 import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
 import com.example.wsd.models.StartUpConfirmationWrapper;
+import com.example.wsd.repo.StartUpDataAPI;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class NewStartupViewController implements Initializable {
@@ -86,5 +88,16 @@ public class NewStartupViewController implements Initializable {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void deleteStartUpClick() {
+        Stage window = (Stage) pathTableView.getScene().getWindow();
+
+        StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
+        List<StartUp> inMemoryStartUps = startUpDataAPI.getInMemoryStartUps();
+        inMemoryStartUps.remove(startUp);
+        startUpDataAPI.saveStartUpsToMemory();
+
+        window.close();
     }
 }

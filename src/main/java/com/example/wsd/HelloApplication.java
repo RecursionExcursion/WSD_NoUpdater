@@ -1,5 +1,6 @@
 package com.example.wsd;
 
+import com.example.wsd.repo.StartUpDataAPI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,5 +20,10 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    @Override
+    public void stop() {
+        new StartUpDataAPI().saveStartUpsToMemory();
     }
 }

@@ -6,7 +6,7 @@ import com.example.wsd.deployables.deployable.Deployable;
 import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -91,9 +91,10 @@ public class MainTableInitializer implements TableViewInitializer {
                     });
 
                     deleteButton.setOnAction(e -> {
-                        ObservableList<StartUp> items = table.getItems();
-                        items.remove(su);
-                        startUpDataAPI.saveStartUpsToMemory(items);
+                        List<StartUp> inMemoryStartUps = startUpDataAPI.getInMemoryStartUps();
+                        inMemoryStartUps.remove(su);
+                        table.setItems(FXCollections.observableList(inMemoryStartUps));
+                        startUpDataAPI.saveStartUpsToMemory();
                     });
 
                 } else {
