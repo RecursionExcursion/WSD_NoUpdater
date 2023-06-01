@@ -3,12 +3,12 @@ package com.example.wsd.fx_nodes.tableviews;
 import com.example.wsd.deployables.Deployer;
 import com.example.wsd.deployables.StartUp;
 import com.example.wsd.deployables.deployable.Deployable;
+import com.example.wsd.fx_nodes.ButtonFactory;
+import com.example.wsd.fx_nodes.HBoxFactory;
 import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -101,22 +101,5 @@ public class MainTableInitializer implements TableViewInitializer {
             }
         });
         return actionCol;
-    }
-
-    private static class ButtonFactory {
-        static Button createButton(String name) {
-            Button newButton = new Button(name);
-            newButton.setPrefWidth(60);
-            return newButton;
-        }
-    }
-
-    private static class HBoxFactory {
-        static HBox createHbox(Node... nodes) {
-            HBox newHbox = new HBox(nodes);
-            newHbox.alignmentProperty().setValue(Pos.CENTER);
-            newHbox.setSpacing(20);
-            return newHbox;
-        }
     }
 }

@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 public class NewStartupViewController implements Initializable {
     @FXML
     public Button addRowButton;
+    @FXML
+    public Button deleteButton;
 
     @FXML
     public TableView<PathString> pathTableView;
@@ -38,6 +40,8 @@ public class NewStartupViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startUpNameTextField.textProperty().setValue("New Start Up");
+        addRowButton.setPrefWidth(80);
+        deleteButton.setPrefWidth(80);
     }
 
     public void init(StartUpConfirmationWrapper confirmationWrapper) {
