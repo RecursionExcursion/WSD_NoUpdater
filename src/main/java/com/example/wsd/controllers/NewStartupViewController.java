@@ -27,6 +27,9 @@ public class NewStartupViewController implements Initializable {
     public Button addRowButton;
     @FXML
     public Button deleteButton;
+    @FXML
+    public Button createButton;
+
 
     @FXML
     public TableView<PathString> pathTableView;
@@ -40,8 +43,6 @@ public class NewStartupViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startUpNameTextField.textProperty().setValue("New Start Up");
-        addRowButton.setPrefWidth(80);
-        deleteButton.setPrefWidth(80);
     }
 
     public void init(StartUpConfirmationWrapper confirmationWrapper) {
@@ -51,6 +52,8 @@ public class NewStartupViewController implements Initializable {
         if (startUp.getName() != null) {
             startUpNameTextField.textProperty().setValue(startUp.getName());
         }
+        Button[] buttons = {addRowButton, deleteButton, createButton};
+        for (Button b : buttons) b.setPrefWidth(80);
     }
 
     public void addRowClick() {

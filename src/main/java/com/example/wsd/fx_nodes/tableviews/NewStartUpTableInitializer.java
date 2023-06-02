@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class NewStartUpTableInitializer implements TableViewInitializer {
@@ -66,12 +67,17 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
             protected void updateItem(PathString ps, boolean b) {
                 final TextField pathTextField = new TextField();
 
-                pathTextField.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                Consumer<String> setPathFieldStyle = s -> {
+                    pathTextField.getStyleClass().clear();
+                    pathTextField.getStyleClass().add(s);
+                };
+
+                setPathFieldStyle.accept("red-border");
                 pathTextField.textProperty().addListener((ob, ov, nv) -> {
                     if (PathTester.testPath(nv)) {
-                        pathTextField.setStyle(null);
+                        setPathFieldStyle.accept("green-border");
                     } else {
-                        pathTextField.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        setPathFieldStyle.accept("red-border");
                     }
                 });
 

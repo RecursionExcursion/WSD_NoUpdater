@@ -36,7 +36,7 @@
     <bottom>
       <HBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#createStartUpClick" text="Create" textAlignment="CENTER" />
+              <Button fx:id="createButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#createStartUpClick" text="Create" textAlignment="CENTER" />
          </children>
          <opaqueInsets>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

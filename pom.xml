@@ -62,7 +62,7 @@
                         <configuration>
                             <mainClass>com.example.wsd.Launcher</mainClass>
                             <launcher>WSD</launcher>
-                            <jlinkZipName>WSD</jlinkZipName>
+                            <jlinkZipName>WSD_JRE</jlinkZipName>
                             <jlinkImageName>WSD</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>

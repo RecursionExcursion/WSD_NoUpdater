@@ -3,6 +3,7 @@ package com.example.wsd.fx_nodes.popups;
 import com.example.wsd.HelloApplication;
 import com.example.wsd.controllers.NewStartupViewController;
 import com.example.wsd.deployables.StartUp;
+import com.example.wsd.fx_util.CssManager;
 import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.collections.FXCollections;
@@ -16,14 +17,15 @@ import java.io.IOException;
 
 public class StartUpEditorPopUp {
 
-    /** Creates a smaller window to edit StartUp Objects.
+    /**
+     * Creates a smaller window to edit StartUp Objects.
      *
      * <p> Creates a smaller window that takes URLs and FilePaths.
      * The wrapper object is used for validation upon the user
      * click of the 'Create' button. </p>
      *
      * @param startUp the StartUp object to be edited
-     * @param table the table that will have the StartUp added to, as well as will be written into memory
+     * @param table   the table that will have the StartUp added to, as well as will be written into memory
      */
 
     public static void createStartUpPopUp(StartUp startUp, TableView<StartUp> table) throws IOException {
@@ -37,12 +39,13 @@ public class StartUpEditorPopUp {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("new-startup-view.fxml"));
 
-        /*
-            Order must be maintained below
-         */
+        /* Order must be maintained below */
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
+        scene.getStylesheets().add(CssManager.INSTANCE.getCssUrl());
         NewStartupViewController controller = fxmlLoader.getController();
         controller.init(confirmationWrapper);
+        /**/
+
 
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
@@ -51,7 +54,7 @@ public class StartUpEditorPopUp {
 
         if (confirmationWrapper.isConfirmed()) {
 
-            if(!startUpDataAPI.read().contains(startUp)){
+            if (!startUpDataAPI.read().contains(startUp)) {
                 startUpDataAPI.create(startUp);
             }
         }
