@@ -35,8 +35,8 @@ public class MainTableInitializer implements TableViewInitializer {
         TableColumn<StartUp, StartUp> actionCol = initializeActionColumn();
 
         //Col Width
-        startUpCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 1.5)); // .6
-        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 3)); // .3
+        startUpCol.prefWidthProperty().bind(table.widthProperty().multiply(.66)); // .6
+        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(.33)); // .3
 
         table.getColumns().setAll(List.of(startUpCol, actionCol));
         table.getItems().addAll(startUpDataAPI.read());

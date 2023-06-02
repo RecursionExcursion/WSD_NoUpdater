@@ -47,8 +47,8 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         TableColumn<PathString, PathString> actionCol = initializeActionColumn();
 
         //Column Width
-        pathCol.prefWidthProperty().bind(table.widthProperty().multiply(4.00 / 5)); // .6
-        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(1.00 / 5)); // .3
+        pathCol.prefWidthProperty().bind(table.widthProperty().multiply(.8)); // .6
+        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(.2)); // .3
 
         table.getColumns().setAll(List.of(pathCol, actionCol));
 
