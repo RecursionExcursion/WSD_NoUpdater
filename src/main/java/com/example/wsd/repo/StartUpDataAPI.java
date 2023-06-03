@@ -6,7 +6,9 @@ import com.example.wsd.repo.serialization.SerializationManager;
 
 import java.util.List;
 
-public class StartUpDataAPI {
+public enum StartUpDataAPI {
+
+    INSTANCE;
 
     private static final SerializationManager SERIALIZATION_MANAGER = SerializationManager.INSTANCE;
     private static final List<StartUp> GLOBAL_START_UP_LIST = SERIALIZATION_MANAGER.loadObject().getList();

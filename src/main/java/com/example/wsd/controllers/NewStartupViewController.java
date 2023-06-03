@@ -9,6 +9,7 @@ import com.example.wsd.fx_util.PathTester;
 import com.example.wsd.models.PathString;
 import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -56,9 +57,11 @@ public class NewStartupViewController implements Initializable {
         for (Button b : buttons) b.setPrefWidth(80);
     }
 
+
     public void addRowClick() {
         ObservableList<PathString> items = pathTableView.getItems();
         items.add(new PathString());
+        Platform.runLater(() -> pathTableView.scrollTo(items.size()));
     }
 
     public void createStartUpClick() {
@@ -98,10 +101,7 @@ public class NewStartupViewController implements Initializable {
 
     public void deleteStartUpClick() {
         Stage window = (Stage) pathTableView.getScene().getWindow();
-
-        StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
-        startUpDataAPI.delete(startUp);
-
+        StartUpDataAPI.INSTANCE.delete(startUp);
         window.close();
     }
 }

@@ -3,7 +3,7 @@ package com.example.wsd.fx_nodes.popups;
 import com.example.wsd.HelloApplication;
 import com.example.wsd.controllers.NewStartupViewController;
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.fx_util.CssManager;
+import com.example.wsd.fx_util.GlobalCSS;
 import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.collections.FXCollections;
@@ -31,7 +31,6 @@ public class StartUpEditorPopUp {
     public static void createStartUpPopUp(StartUp startUp, TableView<StartUp> table) throws IOException {
         Stage popUpWindow = new Stage();
 
-
         StartUpConfirmationWrapper confirmationWrapper = new StartUpConfirmationWrapper(startUp);
 
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
@@ -41,16 +40,17 @@ public class StartUpEditorPopUp {
 
         /* Order must be maintained below */
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
-        scene.getStylesheets().add(CssManager.INSTANCE.getCssUrl());
         NewStartupViewController controller = fxmlLoader.getController();
         controller.init(confirmationWrapper);
         /**/
 
+        //Apply CSS to scene
+        GlobalCSS.applyGlobalCSS(scene);
 
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
 
-        StartUpDataAPI startUpDataAPI = new StartUpDataAPI();
+        StartUpDataAPI startUpDataAPI = StartUpDataAPI.INSTANCE;
 
         if (confirmationWrapper.isConfirmed()) {
 
