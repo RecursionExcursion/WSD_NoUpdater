@@ -13,8 +13,7 @@ public enum SettingsDataAPI {
     //TODO Re-check logic, Possibly create tasks to run in background for more fluid application
 
     public GlobalSettings read() {
-        GLOBAL_SETTINGS = SERIALIZATION_MANAGER.loadSettingsData();
-        return GLOBAL_SETTINGS;
+        return GLOBAL_SETTINGS = SERIALIZATION_MANAGER.loadSettingsData();
     }
 
     public void update() {

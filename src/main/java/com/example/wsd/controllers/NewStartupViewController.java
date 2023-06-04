@@ -1,11 +1,8 @@
 package com.example.wsd.controllers;
 
 import com.example.wsd.deployables.StartUp;
-import com.example.wsd.deployables.deployable.Deployable;
-import com.example.wsd.deployables.deployable.DeployableFile;
-import com.example.wsd.deployables.deployable.DeployableUrl;
 import com.example.wsd.fx_nodes.tableviews.NewStartUpTableInitializer;
-import com.example.wsd.fx_util.PathTester;
+import com.example.wsd.fx_util.DeployablePathBuilder;
 import com.example.wsd.models.PathString;
 import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
@@ -18,8 +15,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -68,7 +63,7 @@ public class NewStartupViewController implements Initializable {
         ObservableList<PathString> items = pathTableView.getItems();
 
         boolean listIsCompletelyValid = items.stream()
-                                             .map(path -> PathTester.testPath(path.getPath()))
+                                             .map(path -> DeployablePathBuilder.testPath(path.getPath()))
                                              .filter(b -> !b)
                                              .findAny()
                                              .orElse(true);
@@ -77,25 +72,13 @@ public class NewStartupViewController implements Initializable {
 
             //TODO Code Smell - Clearing list to add back to list?
             startUp.getDeployablePaths().clear();
-            items.forEach(ps -> startUp.getDeployablePaths().add(getDeployable(ps.getPath())));
+            items.forEach(ps -> startUp.getDeployablePaths().add(DeployablePathBuilder.buildDeployable(ps.getPath())));
 
             startUp.setName(startUpNameTextField.getText());
 
             Stage window = (Stage) pathTableView.getScene().getWindow();
             confirmationWrapper.setConfirmed(true);
             window.close();
-        }
-    }
-
-    private Deployable getDeployable(String s) {
-        try {
-            if (new File(s).canExecute()) {
-                return new DeployableFile(s);
-            } else {
-                return new DeployableUrl(s);
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
         }
     }
 

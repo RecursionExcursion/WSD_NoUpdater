@@ -1,12 +1,13 @@
 package com.example.wsd.fx_nodes.tableviews;
 
+import com.example.wsd.deployables.Deployer;
 import com.example.wsd.deployables.StartUp;
 import com.example.wsd.deployables.deployable.Deployable;
 import com.example.wsd.deployables.deployable.DeployableFile;
 import com.example.wsd.deployables.deployable.DeployableUrl;
 import com.example.wsd.fx_nodes.ButtonFactory;
 import com.example.wsd.fx_nodes.HBoxFactory;
-import com.example.wsd.fx_util.PathTester;
+import com.example.wsd.fx_util.DeployablePathBuilder;
 import com.example.wsd.models.PathString;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.*;
@@ -47,8 +48,8 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         TableColumn<PathString, PathString> actionCol = initializeActionColumn();
 
         //Column Width
-        pathCol.prefWidthProperty().bind(table.widthProperty().multiply(.8)); // .6
-        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(.2)); // .3
+        pathCol.prefWidthProperty().bind(table.widthProperty().multiply(.6)); // .6
+        actionCol.prefWidthProperty().bind(table.widthProperty().multiply(.4)); // .3
 
         table.getColumns().setAll(List.of(pathCol, actionCol));
 
@@ -74,7 +75,7 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
 
                 setPathFieldStyle.accept("red-border");
                 pathTextField.textProperty().addListener((ob, ov, nv) -> {
-                    if (PathTester.testPath(nv)) {
+                    if (DeployablePathBuilder.testPath(nv)) {
                         setPathFieldStyle.accept("green-border");
                     } else {
                         setPathFieldStyle.accept("red-border");
@@ -98,8 +99,9 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
         TableColumn<PathString, PathString> actionCol = new TableColumn<>("Actions");
         actionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue()));
         actionCol.setCellFactory(p -> new TableCell<>() {
+            private final Button testButton = ButtonFactory.createButton("Test");
             private final Button deleteButton = ButtonFactory.createButton("Delete");
-            final HBox hBox = HBoxFactory.createHbox(deleteButton);
+            final HBox hBox = HBoxFactory.createHbox(testButton, deleteButton);
 
             @Override
             protected void updateItem(PathString ps, boolean b) {
@@ -108,6 +110,13 @@ public class NewStartUpTableInitializer implements TableViewInitializer {
                 if (ps != null) {
                     hBox.setSpacing(5);
                     setGraphic(hBox);
+                    testButton.setOnAction(e -> {
+                        String path = ps.getPath();
+                        if (DeployablePathBuilder.testPath(path)) {
+                            Deployable deployable = DeployablePathBuilder.buildDeployable(path);
+                            Deployer.deploy(deployable);
+                        }
+                    });
                     deleteButton.setOnAction(e -> table.getItems().remove(ps));
 
                 } else {
