@@ -11,6 +11,7 @@ import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -50,7 +51,7 @@ public class MainTableInitializer implements TableViewInitializer {
 
         //TODO ensure all later refrences are from local memory
 
-        if(SettingsDataAPI.INSTANCE.read().isAlphabetizeStartUps()){
+        if (SettingsDataAPI.INSTANCE.read().isAlphabetizeStartUps()) {
             startUpsCopy.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
         }
         table.setItems(FXCollections.observableList(startUpsCopy));
@@ -65,6 +66,7 @@ public class MainTableInitializer implements TableViewInitializer {
             protected void updateItem(StartUp su, boolean b) {
                 super.updateItem(su, b);
                 if (su != null) {
+                    setPadding(new Insets(0, 0, 0, 15));
                     setText(su.getName());
                 } else {
                     setText(null);
@@ -92,7 +94,6 @@ public class MainTableInitializer implements TableViewInitializer {
                     setGraphic(hBox);
 
                     deployButton.setOnAction(e -> {
-
 
                         List<Deployable> deployablePaths = su.getDeployablePaths();
                         if (!deployablePaths.isEmpty()) {
