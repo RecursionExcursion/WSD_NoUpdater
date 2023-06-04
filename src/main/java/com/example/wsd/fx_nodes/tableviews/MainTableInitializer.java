@@ -46,10 +46,9 @@ public class MainTableInitializer implements TableViewInitializer {
 
         table.getColumns().setAll(List.of(startUpCol, actionCol));
 
-
         List<StartUp> startUpsCopy = new ArrayList<>(startUpDataAPI.read());
 
-        //TODO ensure all later refrences are from local memory
+        //TODO ensure all later references are from local memory
 
         if (SettingsDataAPI.INSTANCE.read().isAlphabetizeStartUps()) {
             startUpsCopy.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
