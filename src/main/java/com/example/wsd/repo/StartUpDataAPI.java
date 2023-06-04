@@ -11,7 +11,7 @@ public enum StartUpDataAPI {
     INSTANCE;
 
     private static final SerializationManager SERIALIZATION_MANAGER = SerializationManager.INSTANCE;
-    private static final List<StartUp> GLOBAL_START_UP_LIST = SERIALIZATION_MANAGER.loadObject().getList();
+    private static final List<StartUp> GLOBAL_START_UP_LIST = SERIALIZATION_MANAGER.loadStartUpData().getList();
 
     public void create(StartUp newStartUp) {
         GLOBAL_START_UP_LIST.add(newStartUp);
@@ -32,7 +32,7 @@ public enum StartUpDataAPI {
     }
 
     private void saveGlobalList() {
-        SERIALIZATION_MANAGER.saveObject(mapToSerializableContainer());
+        SERIALIZATION_MANAGER.saveStartUpData(mapToSerializableContainer());
     }
 
     private SerializableStartUpList mapToSerializableContainer() {

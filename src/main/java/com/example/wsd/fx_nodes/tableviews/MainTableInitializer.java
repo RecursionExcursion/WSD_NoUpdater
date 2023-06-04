@@ -6,6 +6,7 @@ import com.example.wsd.deployables.deployable.Deployable;
 import com.example.wsd.fx_nodes.ButtonFactory;
 import com.example.wsd.fx_nodes.HBoxFactory;
 import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
+import com.example.wsd.repo.SettingsDataAPI;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -81,6 +82,7 @@ public class MainTableInitializer implements TableViewInitializer {
 
                     deployButton.setOnAction(e -> {
 
+
                         List<Deployable> deployablePaths = su.getDeployablePaths();
                         if (!deployablePaths.isEmpty()) {
                             Task<Void> deploymentTask = new Task<>() {
@@ -88,7 +90,7 @@ public class MainTableInitializer implements TableViewInitializer {
                                 protected Void call() throws Exception {
                                     for (Deployable path : deployablePaths) {
                                         //Sleep is to take browser initialization into account
-                                        TimeUnit.MILLISECONDS.sleep(750);
+                                        TimeUnit.MILLISECONDS.sleep(SettingsDataAPI.INSTANCE.read().getLoadDelay());
                                         Deployer.deploy(path);
                                     }
                                     return null;
