@@ -31,8 +31,7 @@ public enum SerializationManager {
         try {
             return settingsSerializer.load();
         } catch (Exception e) {
-            GlobalSettings settings = new GlobalSettings(750);
-            settingsSerializer.save(settings);
+            settingsSerializer.save(new GlobalSettings(750));
             return settingsSerializer.load();
         }
     }

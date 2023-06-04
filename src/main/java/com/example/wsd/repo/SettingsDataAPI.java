@@ -16,6 +16,5 @@ public enum SettingsDataAPI {
 
     public void update(GlobalSettings settings) {
         SERIALIZATION_MANAGER.saveSettingsData(settings);
-
     }
 }
