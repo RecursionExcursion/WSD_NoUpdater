@@ -9,6 +9,7 @@ import com.example.wsd.fx_nodes.popups.StartUpEditorPopUp;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -17,6 +18,7 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainTableInitializer implements TableViewInitializer {
 
@@ -78,21 +80,39 @@ public class MainTableInitializer implements TableViewInitializer {
                     setGraphic(hBox);
 
                     deployButton.setOnAction(e -> {
-                        for (Deployable path : su.getDeployablePaths()) {
-                            Deployer.deploy(path);
-//                            /*
-//                            TODO-- Thread Sleep is used to ensure browser
-//                             tabs are opened in the correct order as well as prevent a
-//                             bug where the first tab opens blank. This leaves the performance
-//                             at the whim of the browser (CPU) processing speed. A
-//                             ScheduledThreadPoolExecutor may be better
-//                             suited for the job as Thread.Sleep() in a loop is poor practice.
-//                            */
-                            try {
-                                Thread.sleep(750);
-                            } catch (InterruptedException ex) {
-                                throw new RuntimeException(ex);
-                            }
+
+                        List<Deployable> deployablePaths = su.getDeployablePaths();
+                        if (!deployablePaths.isEmpty()) {
+                            Task<Void> deploymentTask = new Task<>() {
+                                @Override
+                                protected Void call() throws Exception {
+                                    for (Deployable path : deployablePaths) {
+                                        //Sleep is to take browser initialization into account
+                                        TimeUnit.MILLISECONDS.sleep(750);
+                                        Deployer.deploy(path);
+                                    }
+                                    return null;
+                                }
+                            };
+                            // Start the deployment task asynchronously
+                           new Thread(deploymentTask).start();
+
+//                        for (Deployable path : su.getDeployablePaths()) {
+//                            Deployer.deploy(path);
+////                            /*
+////                            TODO-- Thread Sleep is used to ensure browser
+////                             tabs are opened in the correct order as well as prevent a
+////                             bug where the first tab opens blank. This leaves the performance
+////                             at the whim of the browser (CPU) processing speed. A
+////                             ScheduledThreadPoolExecutor may be better
+////                             suited for the job as Thread.Sleep() in a loop is poor practice.
+////                            */
+//                            try {
+//                                Thread.sleep(750);
+//                            } catch (InterruptedException ex) {
+//                                throw new RuntimeException(ex);
+//                            }
+//
                         }
                     });
 
