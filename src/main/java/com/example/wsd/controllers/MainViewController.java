@@ -13,8 +13,6 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -37,10 +35,9 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphicOnSettingsButton() {
-        Path currentRelativePath = Paths.get("");
-        String absPath = currentRelativePath.toAbsolutePath().toString();
-
-        Image image = new Image(absPath + "/src/main/resources/images/light_settings_1280.png",
+        URL resource = getClass().getResource("/images/light_settings_1280.png");
+        assert resource != null;
+        Image image = new Image(resource.toString(),
                                 20, 20, false, true);
         ImageView imageView = new ImageView(image);
         settingsButton.setGraphic(imageView);
