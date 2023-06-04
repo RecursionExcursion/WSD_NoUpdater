@@ -1,14 +1,12 @@
 package com.example.wsd.controllers;
 
 import com.example.wsd.repo.SettingsDataAPI;
+import com.example.wsd.repo.serialization.GlobalSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -18,10 +16,18 @@ import java.util.ResourceBundle;
 
 public class SettingsViewController implements Initializable {
 
+    private final SettingsDataAPI settingsAPI = SettingsDataAPI.INSTANCE;
+
     @FXML
     public Label loadDelayLabel;
     @FXML
     public TextField loadDelayField;
+
+    @FXML
+    public CheckBox sortAlphabeticallyCheckBox;
+
+    @FXML
+    public Label errorLabel;
 
     @FXML
     public Button saveButton;
@@ -30,19 +36,19 @@ public class SettingsViewController implements Initializable {
     public Button cancelButton;
 
     @FXML
-    public Label errorLabel;
+    public Button resetButton;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        saveButton.setPrefWidth(60);
-        cancelButton.setPrefWidth(60);
+        Button[] buttons = {saveButton,cancelButton,resetButton};
+        for (Button b : buttons) b.setPrefWidth(60);
+
         //Set Tool Tips
         loadDelayLabel.setTooltip(getLoadDelayToolTip());
         loadDelayField.setTooltip(getLoadDelayToolTip());
 
-        long loadDelay = SettingsDataAPI.INSTANCE.read().getLoadDelay();
-        loadDelayField.textProperty().setValue(String.valueOf(loadDelay));
+        loadSettingsToNodes();
     }
 
     private Tooltip getLoadDelayToolTip() {
@@ -64,7 +70,12 @@ public class SettingsViewController implements Initializable {
             if (longDelay < 0) {
                 throw new NumberFormatException();
             }
-            SettingsDataAPI.INSTANCE.read().setLoadDelay(longDelay);
+
+            GlobalSettings settings = settingsAPI.read();
+            settings.setLoadDelay(longDelay);
+            settings.setAlphabetizeStartUps(sortAlphabeticallyCheckBox.isSelected());
+            settingsAPI.update();
+
             closeWindowFromEvent(actionEvent);
         } catch (NumberFormatException e) {
             errorLabel.setText("Delay must be a positive whole number!");
@@ -81,5 +92,15 @@ public class SettingsViewController implements Initializable {
         Node source = (Node) actionEvent.getSource();
         Stage window = (Stage) source.getScene().getWindow();
         window.close();
+    }
+
+    private void loadSettingsToNodes(){
+        loadDelayField.textProperty().setValue(String.valueOf(settingsAPI.read().getLoadDelay()));
+        sortAlphabeticallyCheckBox.selectedProperty().setValue(settingsAPI.read().isAlphabetizeStartUps());
+    }
+
+    public void resetButtonClick() {
+        settingsAPI.reset();
+        loadSettingsToNodes();
     }
 }

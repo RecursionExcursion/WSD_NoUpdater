@@ -5,9 +5,11 @@ import java.io.Serializable;
 public class GlobalSettings implements Serializable {
 
     private long loadDelay;
+    private boolean alphabetizeStartUps;
 
-    public GlobalSettings(long loadDelay) {
-        this.loadDelay = loadDelay;
+    public GlobalSettings() {
+        loadDelay = 750;
+        alphabetizeStartUps = false;
     }
 
     public long getLoadDelay() {
@@ -16,5 +18,13 @@ public class GlobalSettings implements Serializable {
 
     public void setLoadDelay(long loadDelay) {
         this.loadDelay = loadDelay;
+    }
+
+    public boolean isAlphabetizeStartUps() {
+        return alphabetizeStartUps;
+    }
+
+    public void setAlphabetizeStartUps(boolean alphabetizeStartUps) {
+        this.alphabetizeStartUps = alphabetizeStartUps;
     }
 }

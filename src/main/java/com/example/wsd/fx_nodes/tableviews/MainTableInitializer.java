@@ -18,6 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +44,16 @@ public class MainTableInitializer implements TableViewInitializer {
         actionCol.prefWidthProperty().bind(table.widthProperty().multiply(.33)); // .3
 
         table.getColumns().setAll(List.of(startUpCol, actionCol));
-        table.getItems().addAll(startUpDataAPI.read());
+
+
+        List<StartUp> startUpsCopy = new ArrayList<>(startUpDataAPI.read());
+
+        //TODO ensure all later refrences are from local memory
+
+        if(SettingsDataAPI.INSTANCE.read().isAlphabetizeStartUps()){
+            startUpsCopy.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
+        }
+        table.setItems(FXCollections.observableList(startUpsCopy));
     }
 
     private static TableColumn<StartUp, StartUp> initializeStartUpColumn() {
@@ -96,7 +107,7 @@ public class MainTableInitializer implements TableViewInitializer {
                                     return null;
                                 }
                             };
-                           new Thread(deploymentTask).start();
+                            new Thread(deploymentTask).start();
                         }
                     });
 

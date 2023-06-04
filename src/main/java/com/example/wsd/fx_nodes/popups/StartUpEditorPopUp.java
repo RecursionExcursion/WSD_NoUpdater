@@ -6,7 +6,6 @@ import com.example.wsd.deployables.StartUp;
 import com.example.wsd.fx_util.GlobalCSS;
 import com.example.wsd.models.StartUpConfirmationWrapper;
 import com.example.wsd.repo.StartUpDataAPI;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -58,7 +57,15 @@ public class StartUpEditorPopUp {
                 startUpDataAPI.create(startUp);
             }
         }
-        table.setItems(FXCollections.observableList(startUpDataAPI.read()));
-        table.refresh();
+
+//        List<StartUp> startUpsCopy = new ArrayList<>(startUpDataAPI.read());
+//
+//        //TODO ensure all later refrences are from local memory
+////        startUpsCopy.sort(Comparator.comparing(StartUp::getName));
+//
+//        table.setItems(FXCollections.observableList(startUpsCopy));
+//        table.refresh();
+
+//        new MainTableInitializer(table).initializeTable();
     }
 }

@@ -56,9 +56,13 @@ public class MainViewController implements Initializable {
 
     private void showNewStartUpPopUp(StartUp startUp) throws IOException {
         StartUpEditorPopUp.createStartUpPopUp(startUp, mainTable);
+        new MainTableInitializer(mainTable).initializeTable();
+
     }
 
     public void openSettingsMenu() throws IOException {
         SettingsPopUp.createSettingsPopUp();
+        new MainTableInitializer(mainTable).initializeTable();
+
     }
 }
