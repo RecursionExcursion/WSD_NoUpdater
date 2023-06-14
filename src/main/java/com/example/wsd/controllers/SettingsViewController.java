@@ -2,6 +2,7 @@ package com.example.wsd.controllers;
 
 import com.example.wsd.repo.SettingsDataAPI;
 import com.example.wsd.repo.serialization.GlobalSettings;
+import com.example.wsd.update.UpdateAlertManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,7 +42,7 @@ public class SettingsViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Button[] buttons = {saveButton,cancelButton,resetButton};
+        Button[] buttons = {saveButton, cancelButton, resetButton};
         for (Button b : buttons) b.setPrefWidth(60);
 
         //Set Tool Tips
@@ -94,7 +95,7 @@ public class SettingsViewController implements Initializable {
         window.close();
     }
 
-    private void loadSettingsToNodes(){
+    private void loadSettingsToNodes() {
         loadDelayField.textProperty().setValue(String.valueOf(settingsAPI.read().getLoadDelay()));
         sortAlphabeticallyCheckBox.selectedProperty().setValue(settingsAPI.read().isAlphabetizeStartUps());
     }
@@ -102,5 +103,9 @@ public class SettingsViewController implements Initializable {
     public void resetButtonClick() {
         settingsAPI.reset();
         loadSettingsToNodes();
+    }
+
+    public void checkForUpdateClick() {
+        new UpdateAlertManager().showAlert();
     }
 }
