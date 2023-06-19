@@ -1,4 +1,13 @@
 {
-  "updaterFolderName": "auto_updater",
-  "updaterExeName": "au-run.exe"
+  "version": 1.0,
+
+  "tempDirectoryName": "tempUpdate",
+
+  "updaterFolderName": "installAndClean",
+  "updaterExeName": "IaC.exe",
+
+  "repository": {
+    "owner": "RecursionExcursion",
+    "repoName": "WorkspaceDeployer"
+  }
 }

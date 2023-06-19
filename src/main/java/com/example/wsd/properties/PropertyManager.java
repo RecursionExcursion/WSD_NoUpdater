@@ -25,4 +25,8 @@ public enum PropertyManager {
     public Properties getProperties() {
         return properties;
     }
+
+    public URL getResource() {
+        return resource;
+    }
 }

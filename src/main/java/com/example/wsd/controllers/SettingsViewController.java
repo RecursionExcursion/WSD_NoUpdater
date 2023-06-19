@@ -2,7 +2,7 @@ package com.example.wsd.controllers;
 
 import com.example.wsd.repo.SettingsDataAPI;
 import com.example.wsd.repo.serialization.GlobalSettings;
-import com.example.wsd.update.UpdateAlertManager;
+import com.example.wsd.update.UpdateManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -106,6 +106,6 @@ public class SettingsViewController implements Initializable {
     }
 
     public void checkForUpdateClick() {
-        new UpdateAlertManager().showAlert();
+        new UpdateManager().update();
     }
 }

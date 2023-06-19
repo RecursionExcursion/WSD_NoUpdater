@@ -9,4 +9,5 @@ module com.example.wsd {
     opens com.example.wsd.controllers to javafx.fxml;
     exports com.example.wsd;
     exports com.example.wsd.properties to com.fasterxml.jackson.databind;
+    exports com.example.wsd.update.release to com.fasterxml.jackson.databind;
 }
