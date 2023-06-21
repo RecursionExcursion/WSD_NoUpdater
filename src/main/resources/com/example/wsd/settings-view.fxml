@@ -16,7 +16,7 @@
    <center>
       <VBox alignment="CENTER" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="20.0">
                <children>
                   <Label fx:id="loadDelayLabel" text="Start Up Delay" />
                   <HBox alignment="CENTER">
@@ -27,18 +27,22 @@
                   </HBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" prefWidth="200.0" spacing="20.0">
                <children>
                   <Label text="Alphabetize Start Ups" />
                   <CheckBox fx:id="sortAlphabeticallyCheckBox" mnemonicParsing="false" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <Button text="Check For Update" onAction="#checkForUpdateClick"/>
+                  <Label fx:id="versionLabel" text="Version" />
+                  <Button onAction="#checkForUpdateClick" text="Check For Update" />
                </children>
             </HBox>
          </children>
+         <BorderPane.margin>
+            <Insets left="100.0" />
+         </BorderPane.margin>
       </VBox>
    </center>
    <bottom>
@@ -49,7 +53,7 @@
                <children>
                   <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveAndCloseClick" text="Save" />
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelAndCloseClick" text="Cancel" />
-                  <Button fx:id="resetButton" mnemonicParsing="false" text="Reset" onAction="#resetButtonClick"/>
+                  <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonClick" text="Reset" />
                </children>
             </HBox>
          </children>

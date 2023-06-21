@@ -18,11 +18,10 @@ import java.util.stream.Collectors;
 
 public class UpdateManager {
 
-    public void update() {
-        UpdateAlertManager updateAlertManager = new UpdateAlertManager(this);
+    public static void update() {
         Optional<Release> updateIfPresent = getUpdateIfPresent();
         if (updateIfPresent.isPresent()) {
-            boolean willUpdate = updateAlertManager.showUpdateAlert();
+            boolean willUpdate = UpdateAlertManager.showUpdateAlert();
             if (willUpdate) {
                 Release release = updateIfPresent.get();
                 Downloader.downloadFilesToTempDirectory(release.getZipball_url());
@@ -30,11 +29,11 @@ public class UpdateManager {
                 startUpdaterAndExit();
             }
         } else {
-            updateAlertManager.showNoUpdateAlert();
+            UpdateAlertManager.showNoUpdateAlert();
         }
     }
 
-    private Optional<Release> getUpdateIfPresent() {
+    private static Optional<Release> getUpdateIfPresent() {
 
         double currentVersion = PropertyManager.INSTANCE.getProperties().getVersion();
 
@@ -54,7 +53,7 @@ public class UpdateManager {
         return optionalNewRelease;
     }
 
-    private Release[] getReleases() {
+    private static Release[] getReleases() {
         InputStream inputStream = Downloader.downloadReleases();
         String text = new BufferedReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines()
@@ -62,23 +61,21 @@ public class UpdateManager {
 
         ObjectMapper releaseMapper = new ObjectMapper();
 
-
         try {
-            Release[] releases = releaseMapper.readValue(text, Release[].class);
-            return releases;
+            return releaseMapper.readValue(text, Release[].class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void updateVersion(Release release) {
+    private static void updateVersion(Release release) {
         Properties properties = PropertyManager.INSTANCE.getProperties();
         String tagName = release.getTag_name();
         properties.setVersion(Double.parseDouble(tagName));
         mapPropertiesJson(properties);
     }
 
-    private void mapPropertiesJson(Properties properties) {
+    private static void mapPropertiesJson(Properties properties) {
         //TODO might throw error when writing to json in deployed environment
         URL propertiesResource = PropertyManager.INSTANCE.getResource();
         File propertiesFile;
@@ -94,7 +91,7 @@ public class UpdateManager {
         }
     }
 
-    private void startUpdaterAndExit() {
+    private static void startUpdaterAndExit() {
         String updaterExeName = PropertyManager.INSTANCE.getProperties().getUpdaterExeName();
 
         File updaterDirectory = DirectoryManager.getUpdaterDirectory();
@@ -110,7 +107,7 @@ public class UpdateManager {
         System.exit(0);
     }
 
-    private void deployUpdater(File updaterFile) {
+    private static void deployUpdater(File updaterFile) {
         try {
             Desktop.getDesktop().open(updaterFile);
         } catch (IOException e) {

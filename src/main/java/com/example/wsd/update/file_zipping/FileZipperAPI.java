@@ -7,7 +7,6 @@ import java.nio.file.Files;
 
 public class FileZipperAPI {
 
-
     public static void unZipFilesToDestination(InputStream stream, File destDir) {
 
         if (filePathExists(destDir)) {

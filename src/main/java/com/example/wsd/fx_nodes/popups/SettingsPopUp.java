@@ -25,6 +25,7 @@ public class SettingsPopUp {
         GlobalCSS.applyGlobalCSS(scene);
 
         settingsWindow.setScene(scene);
+        settingsWindow.setResizable(false);
         settingsWindow.showAndWait();
     }
 }

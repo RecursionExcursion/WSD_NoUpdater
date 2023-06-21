@@ -1,5 +1,6 @@
 package com.example.wsd.controllers;
 
+import com.example.wsd.properties.PropertyManager;
 import com.example.wsd.repo.SettingsDataAPI;
 import com.example.wsd.repo.serialization.GlobalSettings;
 import com.example.wsd.update.UpdateManager;
@@ -21,6 +22,7 @@ public class SettingsViewController implements Initializable {
 
     @FXML
     public Label loadDelayLabel;
+
     @FXML
     public TextField loadDelayField;
 
@@ -39,6 +41,9 @@ public class SettingsViewController implements Initializable {
     @FXML
     public Button resetButton;
 
+    @FXML
+    public Label versionLabel;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -50,6 +55,9 @@ public class SettingsViewController implements Initializable {
         loadDelayField.setTooltip(getLoadDelayToolTip());
 
         loadSettingsToNodes();
+        double version = PropertyManager.INSTANCE.getProperties().getVersion();
+        versionLabel.setText(String.format("Version: %.2f", version));
+
     }
 
     private Tooltip getLoadDelayToolTip() {

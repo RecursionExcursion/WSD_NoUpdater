@@ -7,38 +7,26 @@ import java.util.Optional;
 
 class UpdateAlertManager {
 
-    private final ButtonType update = new ButtonType("Update and Restart");
-    private final ButtonType cancel = new ButtonType("Cancel");
-    private final UpdateManager updateManager;
+    private static final ButtonType update = new ButtonType("Update and Restart");
+    private static final ButtonType cancel = new ButtonType("Cancel");
 
-    UpdateAlertManager(UpdateManager manager) {
-        updateManager = manager;
-    }
-
-    boolean showUpdateAlert() {
-
+    static boolean showUpdateAlert() {
         Optional<ButtonType> result = createNewUpdateAlert().showAndWait();
-        if (result.isPresent() && result.orElse(cancel) == update) {
-            System.out.println("Update that shit");
-            return true;
-
-        }
-
-        return false;
+        return result.isPresent() && result.orElse(cancel) == update;
     }
 
-    void showNoUpdateAlert() {
+    static void showNoUpdateAlert() {
         createNoUpdateAlert().showAndWait();
     }
 
-    private Alert createNewUpdateAlert() {
+    private static Alert createNewUpdateAlert() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "A new update is available!", update, cancel);
         alert.setHeaderText(null);
         return alert;
     }
 
-    private Alert createNoUpdateAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "You are up to date");
+    private static Alert createNoUpdateAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "You are up to date!");
         alert.setHeaderText(null);
         return alert;
     }
