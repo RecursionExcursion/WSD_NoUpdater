@@ -1,6 +1,7 @@
 package com.example.wsd;
 
 import com.example.wsd.fx_util.GlobalCSS;
+import com.example.wsd.properties.PropertyManager;
 import com.example.wsd.repo.StartUpDataAPI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,9 @@ public class HelloApplication extends Application {
         //Apply css to scene
         GlobalCSS.applyGlobalCSS(scene);
 
-        stage.setTitle("Workspace Deployer-1.01!");
+        double version = PropertyManager.INSTANCE.getProperties().getVersion();
+
+        stage.setTitle(String.format("Workspace Deployer %.2f", version));
         stage.setScene(scene);
         stage.show();
     }
