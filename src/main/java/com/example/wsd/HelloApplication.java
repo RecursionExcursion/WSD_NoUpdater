@@ -18,7 +18,7 @@ public class HelloApplication extends Application {
         //Apply css to scene
         GlobalCSS.applyGlobalCSS(scene);
 
-        stage.setTitle("Workspace Deployer!");
+        stage.setTitle("Workspace Deployer-1.01!");
         stage.setScene(scene);
         stage.show();
     }

@@ -1,11 +1,6 @@
 {
   "version": 1.00,
 
-  "tempDirectoryName": "tempUpdate",
-
-  "updaterFolderName": "installAndClean",
-  "updaterExeName": "IaC.exe",
-
   "repository": {
     "owner": "RecursionExcursion",
     "repoName": "WorkspaceDeployer"

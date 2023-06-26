@@ -16,7 +16,7 @@
    <center>
       <VBox alignment="CENTER" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" spacing="20.0">
                <children>
                   <Label fx:id="loadDelayLabel" text="Start Up Delay" />
                   <HBox alignment="CENTER">
@@ -27,13 +27,13 @@
                   </HBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" spacing="20.0">
                <children>
                   <Label text="Alphabetize Start Ups" />
                   <CheckBox fx:id="sortAlphabeticallyCheckBox" mnemonicParsing="false" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" spacing="20.0">
                <children>
                   <Label fx:id="versionLabel" text="Version" />
                   <Button onAction="#checkForUpdateClick" text="Check For Update" />
@@ -41,8 +41,14 @@
             </HBox>
          </children>
          <BorderPane.margin>
-            <Insets left="100.0" />
+            <Insets />
          </BorderPane.margin>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="100.0" />
+         </padding>
       </VBox>
    </center>
    <bottom>

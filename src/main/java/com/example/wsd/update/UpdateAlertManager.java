@@ -7,7 +7,7 @@ import java.util.Optional;
 
 class UpdateAlertManager {
 
-    private static final ButtonType update = new ButtonType("Update and Restart");
+    private static final ButtonType update = new ButtonType("Go to Releases Download");
     private static final ButtonType cancel = new ButtonType("Cancel");
 
     static boolean showUpdateAlert() {
