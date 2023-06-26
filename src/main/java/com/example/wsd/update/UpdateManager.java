@@ -8,10 +8,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UpdateManager {
@@ -27,7 +29,7 @@ public class UpdateManager {
                                                  repository.getOwner(),
                                                  repository.getRepoName());
 
-                openUri(URI.create(urlString));
+                openUriInBrowser(URI.create(urlString));
             }
         } else {
             UpdateAlertManager.showNoUpdateAlert();
@@ -40,18 +42,18 @@ public class UpdateManager {
 
         Release[] releases = getReleases();
 
-        Optional<Release> optionalNewRelease = Optional.empty();
-
-
-        for (Release release : releases) {
-            double v = Double.parseDouble(release.getTag_name());
-            //TODO check logic
-            if (v > currentVersion) {
-                optionalNewRelease = Optional.of(release);
-                currentVersion = v;
+        try {
+            for (Release release : releases) {
+                double v = Double.parseDouble(release.getTag_name());
+                //TODO check logic
+                if (v > currentVersion) {
+                    return true;
+                }
             }
+        } catch (NumberFormatException e) {
+            return false;
         }
-        return optionalNewRelease.isPresent();
+        return false;
     }
 
     private static Release[] getReleases() {
@@ -69,7 +71,7 @@ public class UpdateManager {
         }
     }
 
-    private static void openUri(URI uri){
+    private static void openUriInBrowser(URI uri){
         try {
             Desktop.getDesktop().browse(uri);
         } catch (IOException e) {

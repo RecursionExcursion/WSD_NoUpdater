@@ -14,15 +14,6 @@ public class GitHubApiAccessor {
         return getHttpURLConnection(urlString);
     }
 
-//    public static HttpURLConnection openReleasesURL(String repositoryOwner, String repositoryName) {
-//
-//        String urlString = String.format("https://github.com/%s/&s/releases",
-//                                         repositoryOwner,
-//                                         repositoryName);
-//
-//        return getHttpURLConnection(url);
-//    }
-
     private static HttpURLConnection getHttpURLConnection(String urlString) {
         try {
             URL url = new URL(urlString);

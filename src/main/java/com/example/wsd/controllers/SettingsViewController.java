@@ -114,6 +114,6 @@ public class SettingsViewController implements Initializable {
     }
 
     public void checkForUpdateClick() {
-        new UpdateManager().update();
+        UpdateManager.update();
     }
 }
