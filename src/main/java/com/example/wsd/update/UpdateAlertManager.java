@@ -20,7 +20,7 @@ class UpdateAlertManager {
     }
 
     private static Alert createNewUpdateAlert() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "A new update is available!", update, cancel);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "A newer version is available!", update, cancel);
         alert.setHeaderText(null);
         return alert;
     }
