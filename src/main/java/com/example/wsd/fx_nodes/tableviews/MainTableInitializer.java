@@ -46,12 +46,7 @@ public class MainTableInitializer implements TableViewInitializer {
 
         table.getColumns().setAll(List.of(startUpCol, actionCol));
 
-        List<StartUp> startUpsCopy = new ArrayList<>(startUpDataAPI.read());
-
-        if (SettingsDataAPI.INSTANCE.read().isAlphabetizeStartUps()) {
-            startUpsCopy.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
-        }
-        table.setItems(FXCollections.observableList(startUpsCopy));
+        setTableItems();
     }
 
     private static TableColumn<StartUp, StartUp> initializeStartUpColumn() {
@@ -87,19 +82,22 @@ public class MainTableInitializer implements TableViewInitializer {
             protected void updateItem(StartUp su, boolean b) {
                 super.updateItem(su, b);
 
+
                 if (su != null) {
                     setGraphic(hBox);
 
                     deployButton.setOnAction(e -> {
+
 
                         List<Deployable> deployablePaths = su.getDeployablePaths();
                         if (!deployablePaths.isEmpty()) {
                             Task<Void> deploymentTask = new Task<>() {
                                 @Override
                                 protected Void call() throws Exception {
+                                    long loadDelay = SettingsDataAPI.INSTANCE.read().getLoadDelay();
                                     for (Deployable path : deployablePaths) {
                                         //Sleep is to take browser initialization into account
-                                        TimeUnit.MILLISECONDS.sleep(SettingsDataAPI.INSTANCE.read().getLoadDelay());
+                                        TimeUnit.MILLISECONDS.sleep(loadDelay);
                                         Deployer.deploy(path);
                                     }
                                     return null;
@@ -112,6 +110,8 @@ public class MainTableInitializer implements TableViewInitializer {
                     editButton.setOnAction(e -> {
                         try {
                             StartUpEditorPopUp.createStartUpPopUp(su, table);
+                            setTableItems();
+                            table.refresh();
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
@@ -119,7 +119,7 @@ public class MainTableInitializer implements TableViewInitializer {
 
                     deleteButton.setOnAction(e -> {
                         startUpDataAPI.delete(su);
-                        table.setItems(FXCollections.observableList(startUpDataAPI.read()));
+                        setTableItems();
                     });
                 } else {
                     setGraphic(null);
@@ -127,5 +127,17 @@ public class MainTableInitializer implements TableViewInitializer {
             }
         });
         return actionCol;
+    }
+
+    private void setTableItems() {
+        table.setItems(FXCollections.observableList(getCopyOfSavedStartUps()));
+    }
+
+    private List<StartUp> getCopyOfSavedStartUps() {
+        List<StartUp> startUpsCopy = new ArrayList<>(startUpDataAPI.read());
+        if (SettingsDataAPI.INSTANCE.read().isAlphabetizeStartUps()) {
+            startUpsCopy.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
+        }
+        return startUpsCopy;
     }
 }

@@ -26,7 +26,6 @@ public class NewStartupViewController implements Initializable {
     @FXML
     public Button createButton;
 
-
     @FXML
     public TableView<PathString> pathTableView;
 

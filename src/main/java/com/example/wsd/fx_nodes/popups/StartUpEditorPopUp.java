@@ -57,15 +57,5 @@ public class StartUpEditorPopUp {
                 startUpDataAPI.create(startUp);
             }
         }
-
-//        List<StartUp> startUpsCopy = new ArrayList<>(startUpDataAPI.read());
-//
-//        //TODO ensure all later refrences are from local memory
-////        startUpsCopy.sort(Comparator.comparing(StartUp::getName));
-//
-//        table.setItems(FXCollections.observableList(startUpsCopy));
-//        table.refresh();
-
-//        new MainTableInitializer(table).initializeTable();
     }
 }
