@@ -15,7 +15,9 @@ public class DeployablePathBuilder {
         if (path.isEmpty()) return false;
         try {
             //Test if path is valid File Path
-            if (new File(path).canExecute()) return true;
+            if (new File(path).canExecute()) {
+                return true;
+            }
             //Check if Path is Valid URL
             new URL(path).toURI();
             return true;
@@ -26,11 +28,7 @@ public class DeployablePathBuilder {
 
     public static Deployable buildDeployable(String s) {
         try {
-            if (new File(s).canExecute()) {
-                return new DeployableFile(s);
-            } else {
-                return new DeployableUrl(s);
-            }
+            return new File(s).canExecute() ? new DeployableFile(s) : new DeployableUrl(s);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
